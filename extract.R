@@ -1,8 +1,9 @@
 library(pdftools)
 library(stringr)
+library(tidyverse)
 a<-pdftools::pdf_data("B377 vol. 2.pdf")
 
-aa<-a[251]
+all<-bind_rows(setNames(a, seq_along(a)), .id = "id")
 
 
 get_species<-function(aa){
