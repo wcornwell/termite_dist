@@ -132,5 +132,5 @@ filter(book5, word(species, 2, 2) != "et") %>%
 book6_pdf <- pdftools::pdf_data("B377 vol. 6.pdf")
 book6 <- extract_data(book6_pdf[9:435])
 filter(book6, word(species, 2, 2) != "et") %>%
-   filter(book6, word(species, 2, 2) != "Spec.?") %>%
+   filter(word(species, 2, 2) != "Spec.?") %>%
    write_csv("book6_v2.csv")
