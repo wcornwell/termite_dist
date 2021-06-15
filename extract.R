@@ -10,10 +10,10 @@ get_species <- function(aa) {
    aa$laggy_lead <- lag(aa$laggy)
    bb <-
       filter(aa,
-             (laggy >= 25 &
-                 laggy <= 32) |
-                (laggy_lead >= 25 &
-                    laggy_lead <= 32)) #take first two words after a break of that size
+             (laggy >= 26 &
+                 laggy <= 29) |
+                (laggy_lead >= 26 &
+                    laggy_lead <= 29)) #take first two words after a break of that size
    bb %>% group_by(y) %>% summarize(species = paste(text, collapse = " ")) ->
       cc
    return(bb)
@@ -55,6 +55,8 @@ fix_problems <- function(df) {
       filter(!grepl(":", species)) %>%
       filter(word(species, 1, 1) != "†") %>%
       filter(word(species, 2, 2) != "and") %>%
+      filter(word(species, 2, 2) != "et") %>% 
+      filter(word(species, 2, 2) != "Spec.?") %>%
       filter(!species %in% c("Species inquirendae", "Submission procedures")) ->
       df6
    return(df6)
@@ -107,30 +109,27 @@ extract_data <- function(aa) {
    full_df <- ungroup(full_df)
    return(full_df)
 }
+107-22
 
+dat[[145]]
+aa<-book2_pdf[22:424]
 
 book2_pdf <- pdftools::pdf_data("B377 vol. 2.pdf")
-book2 <- extract_data(book2_pdf[22:424]) #excluding table of contents
-filter(book2, word(species, 2, 2) != "et") %>% #TODO: move to function
+extract_data(book2_pdf[22:424])  %>% 
    write_csv("book2_v2.csv")
 
 book3_pdf <- pdftools::pdf_data("B377 vol. 3.pdf")
-book3 <- extract_data(book3_pdf[6:352])
-filter(book3, word(species, 2, 2) != "et") %>%
+extract_data(book3_pdf[6:352]) %>%
    write_csv("book3_v2.csv")
 
 book4_pdf <- pdftools::pdf_data("B377 vol. 4.pdf")
-book4 <- extract_data(book4_pdf[10:524])
-filter(book4, word(species, 2, 2) != "et") %>%
+extract_data(book4_pdf[10:524])%>%
    write_csv("book4_v2.csv")
 
 book5_pdf <- pdftools::pdf_data("B377 vol. 5.pdf")
-book5 <- extract_data(book5_pdf[9:496])
-filter(book5, word(species, 2, 2) != "et") %>%
+extract_data(book5_pdf[9:496]) %>%
    write_csv("book5_v2.csv")
 
 book6_pdf <- pdftools::pdf_data("B377 vol. 6.pdf")
-book6 <- extract_data(book6_pdf[9:435])
-filter(book6, word(species, 2, 2) != "et") %>%
-   filter(word(species, 2, 2) != "Spec.?") %>%
+extract_data(book6_pdf[9:435]) %>%
    write_csv("book6_v2.csv")
